@@ -1,0 +1,11 @@
+{
+  "name": "httpServer",
+  "version": "1.0.0",
+  "description": "http-server on Docker",
+  "scripts": {
+    "start": "http-server -a 0.0.0.0 -p 8888"
+  },
+  "dependencies": {
+    "http-server": "^0.11.1"
+  }
+}

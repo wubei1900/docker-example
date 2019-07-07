@@ -1,0 +1,12 @@
+version: "2"
+services:
+  http-server:
+    build: .
+    container_name: "httpServer"
+    volumes:
+      - .:/usr/src/httpServer
+      - /usr/src/httpServer/node_modules
+    ports:
+      - "8888:8888"
+    command: "npm start"
+    restart: always

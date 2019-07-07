@@ -1,0 +1,44 @@
+gitlab:
+  image: 'gitlab/gitlab-ce:latest'
+  container_name: 'gitlab'
+  restart: always
+  hostname: 'ip:9091'
+  environment:
+    GITLAB_OMNIBUS_CONFIG: |
+      external_url 'http://ip:9091'
+      gitlab_rails['gitlab_shell_ssh_port'] = 2225
+  ports:
+    - '9091:9091'
+    - '2225:22'
+  volumes:
+    - '/srv/gitlab/config:/etc/gitlab'
+    - '/srv/gitlab/logs:/var/log/gitlab'
+    - '/srv/gitlab/data:/var/opt/gitlab'
+gitlab-runner:
+  image: 'gitlab/gitlab-runner:latest'
+  container_name: 'gitlab-runner'
+  restart: always
+  links:
+    - gitlab
+  volumes:
+   - '/srv/gitlab-runner/config:/etc/gitlab-runner'
+#   - '/var/run/docker.sock:/var/run/docker.sock'
+#  environment:
+#   - DOCKER_HOST=tcp://ip:2375
+register-runner:
+  container_name: 'register-gitlab-runner'
+  restart: 'no'
+  image: 'gitlab/gitlab-runner:latest'
+  volumes:
+    - '/srv/gitlab-runner/config:/etc/gitlab-runner'
+  command:
+    - register
+    - --non-interactive
+    - --locked=false
+    - --name=Docker Runner
+    - --executor=shell
+#    - --docker-image=docker:latest
+#    - --docker-volumes=/var/run/docker.sock:/var/run/docker.sock
+  environment:
+    - CI_SERVER_URL=http://ip:9091/
+    - REGISTRATION_TOKEN=ozFV_D1w9LybFCTxf2sr

@@ -1,0 +1,12 @@
+version: "2"
+services:
+  jsconsole:
+    build: .
+    container_name: "nodeTest"
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - "8081:8082"
+    command: "npm start"
+    restart: always
